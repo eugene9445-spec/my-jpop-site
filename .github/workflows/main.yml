@@ -2,18 +2,18 @@ name: Update J-POP Collection
 
 on:
   schedule:
-    - cron: '* * * * *' # 修改這裡：代表「每分鐘」執行一次
-  workflow_dispatch: 
+    - cron: '* * * * *' # 每分鐘執行一次
+  workflow_dispatch: # 允許手動執行
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4 # 升級到 v4 以支援新版 Node.js
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5 # 升級到 v5 以支援新版 Node.js
         with:
           python-version: '3.x'
 
@@ -25,5 +25,5 @@ jobs:
           git config --global user.name "Auto-Curator"
           git config --global user.email "bot@github.com"
           git add data.json
-          git commit -m "Minute Update: 5 new songs" || exit 0
+          git commit -m "Automated update: 5 new songs" || exit 0
           git push
