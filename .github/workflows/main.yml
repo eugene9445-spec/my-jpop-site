@@ -1,0 +1,29 @@
+name: Update J-POP Collection
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # 這裡設定每 5 分鐘跑一次
+  workflow_dispatch: # 允許手動點擊執行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Run Curator Script
+        run: python curator.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name "Auto-Curator"
+          git config --global user.email "bot@github.com"
+          git add data.json
+          git commit -m "Automated update: 5 new songs" || exit 0
+          git push
