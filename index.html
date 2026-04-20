@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J-POP Chronicle | 時代迴廊</title>
+    <style>
+        :root { --bg: #fdfaf5; --navy: #1a2a44; --accent: #d4a373; }
+        body { font-family: sans-serif; background: var(--bg); color: #333; margin: 0; }
+        header { background: var(--navy); color: white; padding: 60px 20px; text-align: center; border-bottom: 5px solid var(--accent); }
+        .container { max-width: 1000px; margin: -30px auto 40px; padding: 0 20px; }
+        .controls { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; gap: 10px; margin-bottom: 30px; }
+        #song-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: white; border: 1px solid #eee; padding: 20px; transition: 0.3s; position: relative; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .tag { font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 10px; background: #e3f2fd; color: #1976d2; margin-bottom: 10px; display: inline-block; }
+        .ai-tag { background: #fff3e0; color: #f57c00; }
+        h3 { margin: 10px 0; color: var(--navy); }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>J-POP CHRONICLE</h1>
+        <p>每 5 分鐘由 AI 自動更新的音樂合輯</p>
+    </header>
+    <div class="container">
+        <div class="controls">
+            <input type="text" id="search" placeholder="搜尋歌曲或歌手..." style="flex:1; padding:10px;">
+        </div>
+        <div id="song-grid">
+            </div>
+    </div>
+    <script>
+        // 讀取自動產生的資料
+        async function loadSongs() {
+            try {
+                const response = await fetch('./data.json');
+                const songs = await response.json();
+                const grid = document.getElementById('song-grid');
+                grid.innerHTML = songs.map(song => `
+                    <div class="card">
+                        <span class="tag ai-tag">AI 智慧推薦</span>
+                        <h3>${song.title}</h3>
+                        <p><strong>${song.artist}</strong></p>
+                        <p style="font-size:0.9rem; color:#666;">${song.reason}</p>
+                    </div>
+                `).join('');
+            } catch (e) {
+                document.getElementById('song-grid').innerHTML = "<p>正在生成首批 AI 推薦歌曲，請稍候...</p>";
+            }
+        }
+        setInterval(loadSongs, 300000); // 每5分鐘刷新一次頁面內容
+        loadSongs();
+    </script>
+</body>
+</html>
