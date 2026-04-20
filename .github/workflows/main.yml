@@ -2,8 +2,8 @@ name: Update J-POP Collection
 
 on:
   schedule:
-    - cron: '*/1 * * * *' # 這裡設定每 5 分鐘跑一次
-  workflow_dispatch: # 允許手動點擊執行
+    - cron: '* * * * *' # 修改這裡：代表「每分鐘」執行一次
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -25,5 +25,5 @@ jobs:
           git config --global user.name "Auto-Curator"
           git config --global user.email "bot@github.com"
           git add data.json
-          git commit -m "Automated update: 5 new songs" || exit 0
+          git commit -m "Minute Update: 5 new songs" || exit 0
           git push
